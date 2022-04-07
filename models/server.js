@@ -6,9 +6,10 @@ const { dbConnection } = require('../database/config.db');
 class Server {
 
     constructor() {
-        this.app  = express();
+        this.app = express();
         this.port = process.env.PORT;
         this.usuariosPath = '/api/users';
+        this.tareasPath = '/api/task';
         //Conectar base de datos 
         this.connectedDB();
 
@@ -23,27 +24,28 @@ class Server {
     middlewares() {
 
         // CORS
-        this.app.use( cors() );
+        this.app.use(cors());
 
         // Lectura y parseo del body
-        this.app.use( express.json() );
+        this.app.use(express.json());
 
         // Directorio Público
-        this.app.use( express.static('public') );
+        this.app.use(express.static('public'));
 
     }
 
-    async connectedDB (){
+    async connectedDB() {
         await dbConnection();
     }
 
     routes() {
-        this.app.use( this.usuariosPath, require('../routes/users.routes'));
+        this.app.use(this.usuariosPath, require('../routes/users.routes'));
+        this.app.use(this.tareasPath, require('../routes/task.routes'));
     }
 
     listen() {
-        this.app.listen( this.port, () => {
-            console.log('Servidor corriendo en puerto', this.port );
+        this.app.listen(this.port, () => {
+            console.log('Servidor corriendo en puerto', this.port);
         });
     }
 

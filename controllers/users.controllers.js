@@ -4,21 +4,17 @@ const bcrypt = require('bcryptjs');
 
 const User = require('../models/users')
 
-const usuariosGet = (req = request, res = response) => {
+const loginUser = (req = request, res = response) => {
 
-    const { q, nombre = 'No name', apikey, page = 1, limit } = req.query;
+    const { email, password } = req.body
 
     res.json({
         msg: 'get API - controlador',
-        q,
-        nombre,
-        apikey,
-        page,
-        limit
+
     });
 }
 
-const createUser = async (req, res = response) => {
+const createUser = async (req = request, res = response) => {
 
     const { name, email, password, role } = req.body
     const usuario = new User({ name, email, password, role });
@@ -38,35 +34,33 @@ const createUser = async (req, res = response) => {
     });
 }
 
-const usuariosPut = (req, res = response) => {
+const modifyUser = async (req = request, res = response) => {
 
     const { id } = req.params;
+    // datos que no quiero actualizar
+    const { _id, password, google, email, ...resto } = req.body
+
+    if (password) {
+        // Encryptar contraseña 
+
+        const salt = bcrypt.genSaltSync();
+        resto.password = bcrypt.hashSync(password, salt)
+    }
+    const usuario = await User.findByIdAndUpdate(id, resto)
 
     res.json({
-        msg: 'put API - usuariosPut',
-        id
+        msg: 'Cambios Realizados',
+        usuario
+
     });
 }
 
-const usuariosPatch = (req, res = response) => {
-    res.json({
-        msg: 'patch API - usuariosPatch'
-    });
-}
-
-const usuariosDelete = (req, res = response) => {
-    res.json({
-        msg: 'delete API - usuariosDelete'
-    });
-}
 
 
 
 
 module.exports = {
-    usuariosGet,
+    loginUser,
     createUser,
-    usuariosPut,
-    usuariosPatch,
-    usuariosDelete,
+    modifyUser,
 }
