@@ -1,12 +1,9 @@
 const { response, request } = require('express');
 
-
 const Tasks = require('../models/tasks');
 const User = require('../models/users')
 
-
 const getTask = async (req = request, res = response) => {
-
     const tarea = await Tasks.find()
 
     res.json({
@@ -38,9 +35,7 @@ const createTask = async (req, res = response) => {
 }
 
 const getTask_id = async (req, res = response) => {
-
     const { id } = req.params;
-
     const tarea = await Tasks.find({ user_id: id })
     res.json({
         tarea
@@ -49,13 +44,9 @@ const getTask_id = async (req, res = response) => {
 
 
 const modifyTask = async (req = request, res = response) => {
-
     const { id } = req.params;
-    // datos que no quiero actualizar
     const { _id, user_id, ...resto } = req.body
-
     const tarea = await Tasks.findByIdAndUpdate(id, resto)
-
     res.json({
         msg: 'Cambios Realizados',
         tarea
