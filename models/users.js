@@ -21,7 +21,7 @@ const userSchema = Schema({
         enum: ['Administrador', 'Operario']
     },
     img: {
-        type: String,
+        type: Schema.Types.Buffer,
     },
     state: {
         type: Boolean,
@@ -33,8 +33,8 @@ const userSchema = Schema({
     },
 });
 
-userSchema.methods.toJSON = function (){
-    const {__v, password, ... user} = this.toObject();
+userSchema.methods.toJSON = function () {
+    const { __v, ...user } = this.toObject();
     return user
 }
 

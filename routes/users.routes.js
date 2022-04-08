@@ -6,6 +6,7 @@ const {
     loginUser,
     modifyUser,
     createUser,
+    usuariosGet
 } = require('../controllers/users.controllers');
 
 const {
@@ -14,12 +15,15 @@ const {
     existId,
     existEmailLogin
 } = require('../helpers/db-validate');
+
 const { validarCampos } = require('../middlewares/validate');
 
 const router = Router();
 
 
-// router.post('/', usuariosGet);
+router.get('/all', usuariosGet);
+
+// Modificar datos
 
 router.patch('/:id', [
     check('id', 'No es un id valido').isMongoId(),
@@ -27,6 +31,8 @@ router.patch('/:id', [
     check('role').custom(isRoleValidate),
     validarCampos
 ], modifyUser);
+
+// Crear usuario 
 
 router.post('/user', [
     check('name', 'El nombre es obligatorio').not().isEmpty(),
@@ -41,7 +47,7 @@ router.post('/user', [
     validarCampos,
 ], createUser);
 
-
+// Login 
 router.post('/auth/login', [
     check('password', 'El password es obligatorio').not().isEmpty(),
     check('email', 'El correo es obligatorio').not().isEmpty(),

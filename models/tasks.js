@@ -9,7 +9,7 @@ const taskSchema = Schema({
 
     user_id: {
         type: Schema.Types.ObjectId,
-        required: [true, 'El id del usuario es necesario de la tarea es obligatorio']
+        required: [true, 'El id del usuario es obligatorio']
     },
 
     task_state: {

@@ -31,7 +31,7 @@ const existTaskId = async (id) => {
 
 const existEmailLogin = async (email = "") => {
     const exist = await User.findOne({ email })
-    if (exist) {
+    if (!exist) {
         throw new Error(`El correo: ${email} no esta registrado en la base de datos`)
     }
 }

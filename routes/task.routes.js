@@ -6,6 +6,7 @@ const {
     createTask,
     getTask_id,
     modifyTask,
+    getTask_id_task
 } = require('../controllers/task.controllers')
 const { existId, existTaskId } = require('../helpers/db-validate');
 const { validarCampos } = require('../middlewares/validate');
@@ -13,7 +14,13 @@ const { validarCampos } = require('../middlewares/validate');
 const router = Router();
 
 // Debe obtener todas las tareas.
-router.get('/task', getTask);
+router.get('/alltask', getTask);
+
+router.get('/gettask/:id', [
+    check('id', 'No es un id valido').isMongoId(),
+    check('id').custom(existTaskId),
+    validarCampos
+], getTask_id_task);
 
 // Obtener tareas por id de usuario
 router.get('/task/:id', [
